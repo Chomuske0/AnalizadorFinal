@@ -7,7 +7,6 @@ GRUPO: 6N1
 Eric Estrada Eligio
 Pamela Rojas Hernandez
 David Rene Castañeda Blancas
-MONSERRAT AURORA ABIGAIL VACA QUEROL
 
 # Numero de Equipo:
 3
