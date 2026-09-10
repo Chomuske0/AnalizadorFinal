@@ -1,3 +1,5 @@
+package analizador.modelo;
+
 /**
  * Clase ErrorSintactico
  * Representa un error detectado por el analizador sintactico.

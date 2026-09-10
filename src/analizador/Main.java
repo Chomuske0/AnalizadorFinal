@@ -1,3 +1,6 @@
+package analizador;
+
+import analizador.gui.VentanaPrincipal;
 
 import javax.swing.SwingUtilities;
 

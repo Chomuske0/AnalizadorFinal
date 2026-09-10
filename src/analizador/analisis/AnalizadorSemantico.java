@@ -1,3 +1,7 @@
+package analizador.analisis;
+
+import analizador.modelo.ErrorSemantico;
+import analizador.modelo.Token;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ public class AnalizadorSemantico {
     private static Map<String, String> tamanoSimbolo;   // BYTE | WORD | DWORD | QWORD | N_A
     private static Map<String, Integer> lineaDeclaracion;
 
-    private static List<Errorsemantico> errores;
+    private static List<ErrorSemantico> errores;
 
     private AnalizadorSemantico() {
     }
@@ -51,7 +55,7 @@ public class AnalizadorSemantico {
      * devolvio true, para evitar arrastrar errores de una fase anterior.
      */
     public static boolean analizar(List<Token> listaTokens) {
-        errores = new ArrayList<Errorsemantico>();
+        errores = new ArrayList<ErrorSemantico>();
         tipoSimbolo = new HashMap<String, String>();
         tamanoSimbolo = new HashMap<String, String>();
         lineaDeclaracion = new HashMap<String, Integer>();
@@ -519,16 +523,16 @@ public class AnalizadorSemantico {
     }
 
     private static void agregarError(int linea, String mensaje) {
-        errores.add(new Errorsemantico(linea, mensaje));
+        errores.add(new ErrorSemantico(linea, mensaje));
     }
 
     // ---------- GETTERS Y SETTERS ----------
 
-    public static List<Errorsemantico> getErrores() {
+    public static List<ErrorSemantico> getErrores() {
         return errores;
     }
 
-    public static void setErrores(List<Errorsemantico> nuevaLista) {
+    public static void setErrores(List<ErrorSemantico> nuevaLista) {
         errores = nuevaLista;
     }
 

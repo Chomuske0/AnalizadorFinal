@@ -1,3 +1,4 @@
+package analizador.modelo;
 
 /**
  * ErrorSemantico
@@ -11,12 +12,12 @@
  * Aqui se deja separada para no mezclar errores de distintas fases.
  * ------------------------------------------------------------
  */
-public class Errorsemantico {
+public class ErrorSemantico {
 
     private int linea;
     private String mensaje;
 
-    public Errorsemantico(int linea, String mensaje) {
+    public ErrorSemantico(int linea, String mensaje) {
         this.linea = linea;
         this.mensaje = mensaje;
     }

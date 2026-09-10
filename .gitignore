@@ -1,0 +1,21 @@
+# Archivos compilados
+*.class
+bin/
+out/
+build/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# OS
+Thumbs.db
+.DS_Store

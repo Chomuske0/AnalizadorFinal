@@ -1,3 +1,8 @@
+package analizador.gui;
+
+import analizador.analisis.AnalizadorLexico;
+import analizador.modelo.Token;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -1,3 +1,6 @@
+package analizador.analisis;
+
+import analizador.modelo.Token;
 
 import java.util.ArrayList;
 import java.util.List;

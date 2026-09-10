@@ -1,3 +1,4 @@
+package analizador.modelo;
 
 public class Token {
 

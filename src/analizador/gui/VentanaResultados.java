@@ -1,3 +1,10 @@
+package analizador.gui;
+
+import analizador.analisis.AnalizadorSemantico;
+import analizador.analisis.AnalizadorSintactico;
+import analizador.modelo.ErrorSemantico;
+import analizador.modelo.ErrorSintactico;
+import analizador.modelo.Token;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,7 +25,7 @@ public class VentanaResultados extends JFrame {
     private boolean sintaxisCorrecta;
 
     // Analisis semantico
-    private List<Errorsemantico> erroresSemanticos;
+    private List<ErrorSemantico> erroresSemanticos;
     private boolean semanticaCorrecta;
 
     // ==========================================
@@ -92,7 +99,7 @@ public class VentanaResultados extends JFrame {
             this.semanticaCorrecta = false;
 
             this.erroresSemanticos =
-                    new ArrayList<Errorsemantico>();
+                    new ArrayList<ErrorSemantico>();
         }
 
         // ==========================================
@@ -601,7 +608,7 @@ public class VentanaResultados extends JFrame {
 
     private void cargarDatosSemantico() {
 
-        List<Errorsemantico> lista =
+        List<ErrorSemantico> lista =
                 getErroresSemanticos();
 
         // ==========================================
@@ -670,7 +677,7 @@ public class VentanaResultados extends JFrame {
                 i < lista.size();
                 i++) {
 
-            Errorsemantico e =
+            ErrorSemantico e =
                     lista.get(i);
 
             Object[] fila = {
@@ -723,14 +730,14 @@ public class VentanaResultados extends JFrame {
                 sintaxisCorrecta;
     }
 
-    public List<Errorsemantico>
+    public List<ErrorSemantico>
             getErroresSemanticos() {
 
         return erroresSemanticos;
     }
 
     public void setErroresSemanticos(
-            List<Errorsemantico>
+            List<ErrorSemantico>
                     erroresSemanticos) {
 
         this.erroresSemanticos =
