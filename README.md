@@ -1,12 +1,12 @@
 # Analizador Final 
 
-LENGUAJES Y AUTOMATAS II
-GRUPO: 6N1
+- LENGUAJES Y AUTOMATAS II
+- GRUPO: 6N1
 
 # Nombres de Equipo:
-Eric Estrada Eligio
-Pamela Rojas Hernandez
-David Rene Castañeda Blancas
+- Eric Estrada Eligio
+- Pamela Rojas Hernandez
+- David Rene Castañeda Blancas
 
 # Numero de Equipo:
 3
@@ -14,13 +14,6 @@ David Rene Castañeda Blancas
 ---
 
 # ANALIZADOR LÉXICO, SINTÁCTICO Y SEMÁNTICO PARA ENSAMBLADOR 8086
-
-**Equipo 3**
-
-**Integrantes:**
-- Eric Estrada Eligio
-- Pamela Rojas Hernandez
-- David Rene Castañeda Blancas
 
 ## Descripción
 
