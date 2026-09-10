@@ -4,9 +4,9 @@
 - GRUPO: 6N1
 
 # Nombres de Equipo:
-- Eric Estrada Eligio
-- Pamela Rojas Hernandez
-- David Rene Castañeda Blancas
+- Estrada Eligio Eric
+- Rojas Hernandez Pamela 
+- Rene Castañeda Blancas David 
 
 # Numero de Equipo:
 3
