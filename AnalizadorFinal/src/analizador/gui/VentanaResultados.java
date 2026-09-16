@@ -2,6 +2,8 @@ package analizador.gui;
 
 import analizador.analisis.AnalizadorSemantico;
 import analizador.analisis.AnalizadorSintactico;
+import analizador.arbol.ArbolExpresion;
+import analizador.arbol.NodoExpresion;
 import analizador.modelo.ErrorSemantico;
 import analizador.modelo.ErrorSintactico;
 import analizador.modelo.Token;
@@ -58,6 +60,13 @@ public class VentanaResultados extends JFrame {
     private JLabel etiquetaResumenSemantico;
 
     // ==========================================
+    // COMPONENTES ARBOL DE EXPRESION
+    // ==========================================
+
+    private JTextArea areaArbol;
+    private NodoExpresion arbolPrograma;
+
+    // ==========================================
     // CONSTRUCTOR
     // ==========================================
 
@@ -103,6 +112,12 @@ public class VentanaResultados extends JFrame {
         }
 
         // ==========================================
+        // 3. ARBOL DE EXPRESION
+        // ==========================================
+
+        this.arbolPrograma = ArbolExpresion.construir(tokens);
+
+        // ==========================================
         // CONSTRUIR INTERFAZ
         // ==========================================
 
@@ -117,6 +132,8 @@ public class VentanaResultados extends JFrame {
         cargarDatosSintactico();
 
         cargarDatosSemantico();
+
+        cargarDatosArbol();
     }
 
     // ==========================================
@@ -192,6 +209,12 @@ public class VentanaResultados extends JFrame {
         pestanas.addTab(
                 "Analisis Semantico",
                 construirPanelSemantico()
+        );
+
+        // Pestaña del arbol de expresion
+        pestanas.addTab(
+                "Arbol de Expresion",
+                construirPanelArbol()
         );
 
         add(
@@ -786,5 +809,49 @@ public class VentanaResultados extends JFrame {
 
         this.tablaErroresSemanticos =
                 tablaErroresSemanticos;
+    }
+
+    // ==========================================
+    // PANEL ARBOL DE EXPRESION
+    // ==========================================
+
+    private JPanel construirPanelArbol() {
+
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+
+        // Etiqueta de titulo
+        JLabel etiqueta = new JLabel(
+                "Arbol de Expresion del Programa (AST)",
+                SwingConstants.CENTER
+        );
+        etiqueta.setFont(new Font("Arial", Font.BOLD, 14));
+        etiqueta.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+        panel.add(etiqueta, BorderLayout.NORTH);
+
+        // Area de texto donde se dibuja el arbol
+        areaArbol = new JTextArea();
+        areaArbol.setFont(new Font("Consolas", Font.PLAIN, 13));
+        areaArbol.setEditable(false);
+        areaArbol.setBackground(new Color(245, 245, 245));
+        areaArbol.setBorder(BorderFactory.createEmptyBorder(8, 12, 8, 12));
+
+        JScrollPane scroll = new JScrollPane(areaArbol);
+        panel.add(scroll, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    // ==========================================
+    // CARGAR DATOS DEL ARBOL DE EXPRESION
+    // ==========================================
+
+    private void cargarDatosArbol() {
+        if (arbolPrograma == null || arbolPrograma.getHijos().isEmpty()) {
+            areaArbol.setText("No se pudo construir el arbol de expresion.\n"
+                    + "Verifique que el codigo de entrada no este vacio.");
+            return;
+        }
+        areaArbol.setText(ArbolExpresion.arbolATexto(arbolPrograma));
+        areaArbol.setCaretPosition(0);
     }
 }
