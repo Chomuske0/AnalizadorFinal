@@ -242,7 +242,6 @@ public class ArbolExpresion {
             String prefijoHijo = esUltimo ? "    " : "│   ";
 
             sb.append(prefijo)
-              .append("[Linea ").append(hijo.getNumLinea()).append("] ")
               .append(hijo.getValor())
               .append(" (").append(hijo.getTipo()).append(")\n");
 
