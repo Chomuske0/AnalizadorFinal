@@ -13,19 +13,19 @@
 
 ---
 
-# ANALIZADOR LÉXICO, SINTÁCTICO Y SEMÁNTICO PARA ENSAMBLADOR 8086
+# ANALIZADOR LÉXICO, SINTÁCTICO, SEMÁNTICO Y ÁRBOLES DE EXPRESIONES PARA ENSAMBLADOR 8086
 
 ## Descripción
 
 El proyecto consiste en desarrollar un analizador de código ensamblador 8086 utilizando Java. El programa recibe como entrada un bloque de código y realiza tres etapas de análisis: léxico, sintáctico y semántico.
 
-El análisis léxico identifica los elementos que forman el código y los convierte en tokens. El análisis sintáctico verifica que los tokens estén organizados de acuerdo con la estructura del lenguaje ensamblador 8086. Finalmente, el análisis semántico comprueba que el código tenga sentido, verificando aspectos como variables declaradas, compatibilidad de tamaños, segmentos y destinos de saltos.
+El análisis léxico identifica los elementos que forman el código y los convierte en tokens. El análisis sintáctico verifica que los tokens estén organizados de acuerdo con la estructura del lenguaje ensamblador 8086. Finalmente, el análisis semántico comprueba que el código tenga sentido, verificando aspectos como variables declaradas, compatibilidad de tamaños, segmentos y destinos de saltos. Adicionalmente, se construye un Árbol de Expresiones (AST) que representa de forma jerárquica la estructura de las instrucciones.
 
-Los resultados de los análisis se muestran mediante una interfaz gráfica, permitiendo consultar los tokens reconocidos y los errores encontrados.
+Los resultados de los análisis se muestran mediante una interfaz gráfica, permitiendo consultar los tokens reconocidos, los errores encontrados y el árbol generado.
 
 ## Objetivo
 
-Desarrollar un analizador de código ensamblador 8086 en Java capaz de realizar análisis léxico, sintáctico y semántico, con el propósito de identificar tokens, detectar errores en la estructura del código y comprobar que las instrucciones sean semánticamente válidas.
+Desarrollar un analizador de código ensamblador 8086 en Java capaz de realizar análisis léxico, sintáctico y semántico, con el propósito de identificar tokens, detectar errores en la estructura del código, comprobar que las instrucciones sean semánticamente válidas y construir su respectivo árbol de expresiones.
 
 ## Objetivos específicos
 
@@ -37,11 +37,12 @@ Desarrollar un analizador de código ensamblador 8086 en Java capaz de realizar 
 - Comprobar que las variables y etiquetas utilizadas estén declaradas.
 - Comprobar la compatibilidad de tamaños entre operandos.
 - Detectar errores semánticos.
+- Construir un Árbol de Expresiones (AST) para representar jerárquicamente las operaciones y sus operandos.
 - Mostrar los resultados mediante una interfaz gráfica.
 
 ## Tecnología utilizada
 
-**Java:** fue la única tecnología utilizada para desarrollar el proyecto. Se utilizó para implementar la lógica de los analizadores y la interfaz gráfica.
+**Java:** fue la única tecnología utilizada para desarrollar el proyecto. Se utilizó para implementar la lógica de los analizadores, la construcción del árbol y la interfaz gráfica.
 
 Para la interfaz gráfica se utilizaron componentes de **Java Swing**, como `JFrame`, `JTextArea`, `JButton`, `JTable`, `JTabbedPane` y `JOptionPane`.
 
@@ -54,7 +55,8 @@ El proceso de análisis sigue el siguiente flujo:
 3. Generación de tokens.
 4. Analizador sintáctico.
 5. Analizador semántico.
-6. Visualización de resultados.
+6. Construcción del Árbol de Expresiones.
+7. Visualización de resultados en pestañas.
 
 ## Ejemplos de prueba
 
@@ -146,6 +148,28 @@ Este código permite comprobar variables declaradas, segmentos, etiquetas, instr
 | SEGMENT sin ENDS | `DATOS SEGMENT` / `VAR1 DW 10` | El segmento no fue cerrado correctamente. |
 | ASSUME con segmento inexistente | `ASSUME CS:PROGRAMA, DS:DATOS` | PROGRAMA no fue declarado. |
 
+## Árbol de Expresiones (AST)
+
+Como resultado final de los análisis, el programa genera un Árbol de Sintaxis Abstracta en formato de texto. Esto permite comprobar que el analizador comprende la jerarquía de las instrucciones siguiendo la regla de **operador-operando** (la instrucción o declaración actúa como nodo padre, y los registros o valores como nodos hijos).
+
+**Ejemplo de generación:**
+Código original:
+```asm
+MOV AX, DATOS
+ADD AX, 10
+```
+
+Árbol generado:
+```text
+PROGRAMA
+├── MOV (INSTRUCCION)
+│   ├── AX (REGISTRO)
+│   └── DATOS (IDENTIFICADOR)
+└── ADD (INSTRUCCION)
+    ├── AX (REGISTRO)
+    └── 10 (NUMERO DEC)
+```
+
 ## Tokens principales
 
 Durante el análisis léxico se pueden reconocer diferentes tipos de elementos:
@@ -160,7 +184,7 @@ Durante el análisis léxico se pueden reconocer diferentes tipos de elementos:
 | Números | 10, 200, 0 |
 | Separadores | `,` y `:` |
 
-## Diferencia entre los tres analizadores
+## Diferencia entre las fases del analizador
 
 **Análisis léxico:** identifica qué es cada elemento del código y genera los tokens.
 
@@ -168,6 +192,8 @@ Durante el análisis léxico se pueden reconocer diferentes tipos de elementos:
 
 **Análisis semántico:** verifica que el código tenga sentido, por ejemplo, que las variables existan, que los tamaños sean compatibles y que los saltos tengan destinos válidos.
 
+**Árbol de Expresiones:** organiza los elementos jerárquicamente para representar las acciones y los valores sobre los que operan.
+
 ## Conclusión
 
-El proyecto permite aplicar las tres primeras etapas del proceso de análisis de un lenguaje sobre código ensamblador 8086. La combinación del análisis léxico, sintáctico y semántico permite detectar diferentes tipos de errores antes de considerar que un programa es válido.
+El proyecto permite aplicar las etapas del proceso de análisis de un lenguaje sobre código ensamblador 8086. La combinación del análisis léxico, sintáctico, semántico y la construcción del árbol de expresiones permite detectar diferentes tipos de errores y estructurar el código antes de considerar que un programa es totalmente válido.
