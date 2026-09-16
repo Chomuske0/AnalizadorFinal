@@ -242,8 +242,7 @@ public class ArbolExpresion {
             String prefijoHijo = esUltimo ? "    " : "│   ";
 
             sb.append(prefijo)
-              .append(hijo.getValor())
-              .append(" - ").append(hijo.getTipo()).append("\n");
+              .append(hijo.getValor()).append("\n");
 
             List<NodoExpresion> subHijos = hijo.getHijos();
             for (int j = 0; j < subHijos.size(); j++) {
@@ -261,8 +260,7 @@ public class ArbolExpresion {
         String nuevoPrefijo = prefijo + (esUltimo ? "    " : "│   ");
 
         sb.append(prefijo).append(conector)
-          .append(nodo.getValor())
-          .append(" - ").append(nodo.getTipo()).append("\n");
+          .append(nodo.getValor()).append("\n");
 
         List<NodoExpresion> hijos = nodo.getHijos();
         for (int i = 0; i < hijos.size(); i++) {
