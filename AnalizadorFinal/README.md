@@ -7,7 +7,7 @@
 - Estrada Eligio Eric
 - Rojas Hernandez Pamela 
 - Rene Castañeda Blancas David 
-
+- Morales Guzmán Frida Ivette 
 # Numero de Equipo:
 3
 
