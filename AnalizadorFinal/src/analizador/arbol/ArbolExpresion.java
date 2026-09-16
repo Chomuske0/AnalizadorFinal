@@ -243,7 +243,7 @@ public class ArbolExpresion {
 
             sb.append(prefijo)
               .append(hijo.getValor())
-              .append(" (").append(hijo.getTipo()).append(")\n");
+              .append(" - ").append(hijo.getTipo()).append("\n");
 
             List<NodoExpresion> subHijos = hijo.getHijos();
             for (int j = 0; j < subHijos.size(); j++) {
@@ -262,7 +262,7 @@ public class ArbolExpresion {
 
         sb.append(prefijo).append(conector)
           .append(nodo.getValor())
-          .append(" (").append(nodo.getTipo()).append(")\n");
+          .append(" - ").append(nodo.getTipo()).append("\n");
 
         List<NodoExpresion> hijos = nodo.getHijos();
         for (int i = 0; i < hijos.size(); i++) {
