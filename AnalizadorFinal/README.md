@@ -13,19 +13,19 @@
 
 ---
 
-# ANALIZADOR LÉXICO, SINTÁCTICO, SEMÁNTICO Y ÁRBOLES DE EXPRESIONES PARA ENSAMBLADOR 8086
+# ANALIZADOR LÉXICO, SINTÁCTICO, SEMÁNTICO, ÁRBOLES DE EXPRESIONES Y CÓDIGO INTERMEDIO PARA ENSAMBLADOR 8086
 
 ## Descripción
 
-El proyecto consiste en desarrollar un analizador de código ensamblador 8086 utilizando Java. El programa recibe como entrada un bloque de código y realiza tres etapas de análisis: léxico, sintáctico y semántico.
+El proyecto consiste en desarrollar un analizador de código ensamblador 8086 utilizando Java. El programa recibe como entrada un bloque de código y realiza cuatro etapas de análisis: léxico, sintáctico, semántico y generación de código intermedio.
 
-El análisis léxico identifica los elementos que forman el código y los convierte en tokens. El análisis sintáctico verifica que los tokens estén organizados de acuerdo con la estructura del lenguaje ensamblador 8086. Finalmente, el análisis semántico comprueba que el código tenga sentido, verificando aspectos como variables declaradas, compatibilidad de tamaños, segmentos y destinos de saltos. Adicionalmente, se construye un Árbol de Expresiones (AST) que representa de forma jerárquica la estructura de las instrucciones.
+El análisis léxico identifica los elementos que forman el código y los convierte en tokens. El análisis sintáctico verifica que los tokens estén organizados de acuerdo con la estructura del lenguaje ensamblador 8086. El análisis semántico comprueba que el código tenga sentido, verificando aspectos como variables declaradas, compatibilidad de tamaños, segmentos y destinos de saltos. Adicionalmente, se construye un Árbol de Expresiones (AST) que representa de forma jerárquica la estructura de las instrucciones. Finalmente, se genera código intermedio en forma de cuádruplos (operador, argumento 1, argumento 2, resultado) y su representación equivalente en código de tres direcciones.
 
-Los resultados de los análisis se muestran mediante una interfaz gráfica, permitiendo consultar los tokens reconocidos, los errores encontrados y el árbol generado.
+Los resultados de los análisis se muestran mediante una interfaz gráfica, permitiendo consultar los tokens reconocidos, los errores encontrados, el árbol generado y los cuádruplos del código intermedio.
 
 ## Objetivo
 
-Desarrollar un analizador de código ensamblador 8086 en Java capaz de realizar análisis léxico, sintáctico y semántico, con el propósito de identificar tokens, detectar errores en la estructura del código, comprobar que las instrucciones sean semánticamente válidas y construir su respectivo árbol de expresiones.
+Desarrollar un analizador de código ensamblador 8086 en Java capaz de realizar análisis léxico, sintáctico y semántico, con el propósito de identificar tokens, detectar errores en la estructura del código, comprobar que las instrucciones sean semánticamente válidas, construir su respectivo árbol de expresiones y generar código intermedio en forma de cuádruplos.
 
 ## Objetivos específicos
 
@@ -38,6 +38,7 @@ Desarrollar un analizador de código ensamblador 8086 en Java capaz de realizar 
 - Comprobar la compatibilidad de tamaños entre operandos.
 - Detectar errores semánticos.
 - Construir un Árbol de Expresiones (AST) para representar jerárquicamente las operaciones y sus operandos.
+- Generar código intermedio en forma de cuádruplos y código de tres direcciones a partir del AST.
 - Mostrar los resultados mediante una interfaz gráfica.
 
 ## Tecnología utilizada
@@ -56,7 +57,8 @@ El proceso de análisis sigue el siguiente flujo:
 4. Analizador sintáctico.
 5. Analizador semántico.
 6. Construcción del Árbol de Expresiones.
-7. Visualización de resultados en pestañas.
+7. Generación de Código Intermedio (Cuádruplos y Código de 3 Direcciones).
+8. Visualización de resultados en pestañas.
 
 ## Ejemplos de prueba
 
@@ -194,6 +196,71 @@ Durante el análisis léxico se pueden reconocer diferentes tipos de elementos:
 
 **Árbol de Expresiones:** organiza los elementos jerárquicamente para representar las acciones y los valores sobre los que operan.
 
+**Código Intermedio:** traduce el árbol de expresiones a una representación simplificada (cuádruplos y código de tres direcciones) que sirve como paso previo a la generación de código máquina.
+
+## Código Intermedio (Cuádruplos)
+
+El programa genera código intermedio de tres direcciones a partir del Árbol de Expresiones (AST). Cada instrucción del ensamblador se traduce a uno o más **cuádruplos** con el formato: `(Operador, Argumento 1, Argumento 2, Resultado)`.
+
+### Reglas de traducción
+
+| Instrucción 8086 | Cuádruplo | Código de 3 Direcciones |
+|-------------------|-----------|------------------------|
+| `MOV AX, 10` | `(=, 10, _, AX)` | `AX = 10` |
+| `ADD AX, BX` | `(+, AX, BX, AX)` | `AX = AX + BX` |
+| `SUB AX, 5` | `(-, AX, 5, AX)` | `AX = AX - 5` |
+| `INC AX` | `(+, AX, 1, AX)` | `AX = AX + 1` |
+| `DEC BX` | `(-, BX, 1, BX)` | `BX = BX - 1` |
+| `MUL BX` | `(*, AX, BX, AX)` | `AX = AX * BX` |
+| `DIV BX` | `(/, AX, BX, AX)` | `AX = AX / BX` |
+| `CMP AX, 5` | `(cmp, AX, 5, _)` | `cmp AX, 5` |
+| `JZ FIN` | `(if==, AX, 5, FIN)` | `if AX == 5 goto FIN` |
+| `JMP INICIO` | `(goto, _, _, INICIO)` | `goto INICIO` |
+| `LOOP CICLO` | `(-, CX, 1, CX)` + `(if!=, CX, 0, CICLO)` | `CX = CX - 1` / `if CX != 0 goto CICLO` |
+| `HLT` | `(halt, _, _, _)` | `halt` |
+
+### Ejemplo de generación
+
+Código original:
+```asm
+MOV AX, DATOS
+MOV DS, AX
+MOV BX, VAR1
+ADD BX, VAR2
+CMP BX, 0
+JZ FIN
+INC BX
+FIN:
+HLT
+```
+
+Cuádruplos generados:
+
+| Línea | Operador | Arg 1 | Arg 2 | Resultado |
+|:-----:|----------|-------|-------|-----------|
+| 1 | `=` | DATOS | _ | AX |
+| 2 | `=` | AX | _ | DS |
+| 3 | `=` | VAR1 | _ | BX |
+| 4 | `+` | BX | VAR2 | BX |
+| 5 | `cmp` | BX | 0 | _ |
+| 6 | `if==` | BX | 0 | FIN |
+| 7 | `+` | BX | 1 | BX |
+| 8 | `label` | _ | _ | FIN |
+| 9 | `halt` | _ | _ | _ |
+
+Código de tres direcciones equivalente:
+```text
+    AX = DATOS
+    DS = AX
+    BX = VAR1
+    BX = BX + VAR2
+    cmp BX, 0
+    if BX == 0 goto FIN
+    BX = BX + 1
+FIN:
+    halt
+```
+
 ## Conclusión
 
-El proyecto permite aplicar las etapas del proceso de análisis de un lenguaje sobre código ensamblador 8086. La combinación del análisis léxico, sintáctico, semántico y la construcción del árbol de expresiones permite detectar diferentes tipos de errores y estructurar el código antes de considerar que un programa es totalmente válido.
+El proyecto permite aplicar las etapas del proceso de análisis de un lenguaje sobre código ensamblador 8086. La combinación del análisis léxico, sintáctico, semántico, la construcción del árbol de expresiones y la generación de código intermedio en forma de cuádruplos permite detectar diferentes tipos de errores, estructurar el código y traducirlo a una representación intermedia antes de considerar que un programa es totalmente válido.

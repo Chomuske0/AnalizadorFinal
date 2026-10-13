@@ -1,4 +1,4 @@
-package analizador.intermedio;
+package analizador.codigo_intermedio;
 
 import analizador.arbol.NodoExpresion;
 

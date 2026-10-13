@@ -4,6 +4,8 @@ import analizador.analisis.AnalizadorSemantico;
 import analizador.analisis.AnalizadorSintactico;
 import analizador.arbol.ArbolExpresion;
 import analizador.arbol.NodoExpresion;
+import analizador.codigo_intermedio.Cuadruplo;
+import analizador.codigo_intermedio.GeneradorCodigoIntermedio;
 import analizador.modelo.ErrorSemantico;
 import analizador.modelo.ErrorSintactico;
 import analizador.modelo.Token;
@@ -65,6 +67,14 @@ public class VentanaResultados extends JFrame {
 
     private JTextArea areaArbol;
     private NodoExpresion arbolPrograma;
+
+    // ==========================================
+    // COMPONENTES CODIGO INTERMEDIO
+    // ==========================================
+
+    private JTable tablaCuadruplos;
+    private DefaultTableModel modeloCuadruplos;
+    private JTextArea areaCodigoIntermedio;
 
     // ==========================================
     // CONSTRUCTOR
@@ -215,6 +225,12 @@ public class VentanaResultados extends JFrame {
         pestanas.addTab(
                 "Arbol de Expresion",
                 construirPanelArbol()
+        );
+
+        // Pestaña de Codigo Intermedio (Cuadruplos)
+        pestanas.addTab(
+                "Codigo Intermedio",
+                construirPanelCodigoIntermedio()
         );
 
         add(
@@ -853,5 +869,71 @@ public class VentanaResultados extends JFrame {
         }
         areaArbol.setText(ArbolExpresion.arbolATexto(arbolPrograma));
         areaArbol.setCaretPosition(0);
+    }
+
+    // ==========================================
+    // PANEL CODIGO INTERMEDIO (CUADRUPLOS)
+    // ==========================================
+
+    private JPanel construirPanelCodigoIntermedio() {
+        JPanel panel = new JPanel(new BorderLayout(10, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Título
+        JLabel titulo = new JLabel("Generación de Código Intermedio (Cuádruplos)", SwingConstants.CENTER);
+        titulo.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(titulo, BorderLayout.NORTH);
+
+        // Tabla de Cuadruplos
+        String[] columnas = {"Línea", "Operador", "Argumento 1", "Argumento 2", "Resultado"};
+        modeloCuadruplos = new DefaultTableModel(columnas, 0);
+        tablaCuadruplos = new JTable(modeloCuadruplos);
+        tablaCuadruplos.setEnabled(false);
+        JScrollPane scrollTabla = new JScrollPane(tablaCuadruplos);
+        scrollTabla.setBorder(BorderFactory.createTitledBorder("Tabla de Cuádruplos"));
+
+        // Área de texto para Código 3 Direcciones
+        areaCodigoIntermedio = new JTextArea();
+        areaCodigoIntermedio.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        areaCodigoIntermedio.setEditable(false);
+        areaCodigoIntermedio.setBackground(new Color(245, 245, 245));
+        JScrollPane scrollTexto = new JScrollPane(areaCodigoIntermedio);
+        scrollTexto.setBorder(BorderFactory.createTitledBorder("Código de 3 Direcciones"));
+
+        // Dividir pantalla en dos
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, scrollTabla, scrollTexto);
+        split.setResizeWeight(0.6); // 60% tabla, 40% texto
+
+        panel.add(split, BorderLayout.CENTER);
+
+        // Llamar a cargar datos
+        cargarDatosCodigoIntermedio();
+
+        return panel;
+    }
+
+    private void cargarDatosCodigoIntermedio() {
+        if (!sintaxisCorrecta || arbolPrograma == null) {
+            areaCodigoIntermedio.setText("Debe haber una sintaxis correcta y un AST para generar cuádruplos.");
+            return;
+        }
+
+        // Llamar a la lógica de tus compañeros
+        List<Cuadruplo> cuadruplos = GeneradorCodigoIntermedio.generar(arbolPrograma);
+
+        // Llenar tabla
+        for (Cuadruplo c : cuadruplos) {
+            modeloCuadruplos.addRow(new Object[]{
+                    c.getNumero(),
+                    c.getOperador(),
+                    c.getArg1(),
+                    c.getArg2(),
+                    c.getResultado()
+            });
+        }
+
+        // Llenar texto
+        areaCodigoIntermedio.setText(GeneradorCodigoIntermedio.aTexto(cuadruplos));
+        areaCodigoIntermedio.setCaretPosition(0);
     }
 }
